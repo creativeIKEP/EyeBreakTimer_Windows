@@ -115,18 +115,54 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (lParam)
             {
                 case WM_LBUTTONUP:
-                    ShowWindow(hWnd, SW_SHOWNORMAL);
-                    UpdateWindow(hWnd);
+                    //ShowWindow(hWnd, SW_SHOWNORMAL);
+                    //UpdateWindow(hWnd);
                     break;
                 case WM_RBUTTONUP:
-                    PostQuitMessage(0);
+                    POINT po;
+                    GetCursorPos(&po);
+
+                    HMENU hMenu = CreatePopupMenu();
+                    MENUITEMINFO menuiteminfo;
+                    menuiteminfo.cbSize = sizeof(menuiteminfo);
+                    menuiteminfo.fMask = MIIM_STRING | MIIM_ID;
+                    menuiteminfo.wID = 1;
+                    WCHAR name[] = L"exit";
+                    menuiteminfo.dwTypeData = name;
+                    InsertMenuItem(hMenu, 0, TRUE, &menuiteminfo);
+
+                    MENUITEMINFO menuiteminfo2;
+                    menuiteminfo2.cbSize = sizeof(menuiteminfo2);
+                    menuiteminfo2.fMask = MIIM_STRING | MIIM_ID;
+                    menuiteminfo2.wID = 0;
+                    WCHAR name2[] = L"setting";
+                    menuiteminfo2.dwTypeData = name2;
+                    InsertMenuItem(hMenu, 0, TRUE, &menuiteminfo2);
+                    TrackPopupMenu(hMenu, 0, po.x, po.y, 0, hWnd, NULL);
+
+                    //PostQuitMessage(0);
                     break;
             }
         }
         break;
+  
     case WM_CLOSE:
         ShowWindow(hWnd, SW_HIDE);
         break;
+    case WM_COMMAND:
+
+        switch (LOWORD(wParam)) {
+
+        case 0: /* Messageメニュー */
+            ShowWindow(hWnd, SW_SHOWNORMAL);
+            UpdateWindow(hWnd);
+            break;
+
+        case 1: /* Exitメニュー */
+            PostQuitMessage(0);
+            break;
+
+        }
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
         break;
