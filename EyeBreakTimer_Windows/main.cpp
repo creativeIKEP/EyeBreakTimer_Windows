@@ -68,8 +68,8 @@ int CALLBACK WinMain(
         return 1;
     }
 
-    ShowWindow(hWnd, nCmdShow);
-    UpdateWindow(hWnd);
+    //ShowWindow(hWnd, nCmdShow);
+    //UpdateWindow(hWnd);
 
     NOTIFYICONDATA nif;
     // タスクトレイに登録
@@ -114,11 +114,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             switch (lParam)
             {
+                case WM_LBUTTONUP:
+                    ShowWindow(hWnd, SW_SHOWNORMAL);
+                    UpdateWindow(hWnd);
+                    break;
+                case WM_RBUTTONUP:
+                    PostQuitMessage(0);
+                    break;
             }
         }
         break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
+    case WM_CLOSE:
+        ShowWindow(hWnd, SW_HIDE);
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
