@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
-
+#define WM_TASKTRAY (WM_USER+1)
+#define ID_TASKTRAY 0
 
 static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
 static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
@@ -70,6 +71,18 @@ int CALLBACK WinMain(
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
+    NOTIFYICONDATA nif;
+    // タスクトレイに登録
+    nif.cbSize = sizeof(NOTIFYICONDATA);
+    nif.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    nif.hWnd = hWnd;
+    nif.uCallbackMessage = WM_TASKTRAY;
+    nif.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+    nif.uID = ID_TASKTRAY;
+    ::wcscpy_s(nif.szTip, 128, szTitle);
+
+    Shell_NotifyIcon(NIM_ADD, &nif);
+
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {
@@ -95,6 +108,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TextOut(hdc, 5, 5, greeting, _tcslen(greeting));
 
         EndPaint(hWnd, &ps);
+        break;
+    case WM_TASKTRAY:
+        if (wParam == ID_TASKTRAY)
+        {
+            switch (lParam)
+            {
+            }
+        }
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
