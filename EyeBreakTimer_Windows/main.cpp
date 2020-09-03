@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
+#include "menu.h"
 #define WM_TASKTRAY (WM_USER+1)
 #define ID_TASKTRAY 0
 
 static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
 static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
 HINSTANCE hInst;
+Menu menu;
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -68,9 +70,6 @@ int CALLBACK WinMain(
         return 1;
     }
 
-    //ShowWindow(hWnd, nCmdShow);
-    //UpdateWindow(hWnd);
-
     NOTIFYICONDATA nif;
     // タスクトレイに登録
     nif.cbSize = sizeof(NOTIFYICONDATA);
@@ -109,38 +108,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         EndPaint(hWnd, &ps);
         break;
+
     case WM_TASKTRAY:
         if (wParam == ID_TASKTRAY)
         {
             switch (lParam)
             {
                 case WM_LBUTTONUP:
-                    //ShowWindow(hWnd, SW_SHOWNORMAL);
-                    //UpdateWindow(hWnd);
-                    break;
-                case WM_RBUTTONUP:
-                    POINT po;
-                    GetCursorPos(&po);
-
-                    HMENU hMenu = CreatePopupMenu();
-                    MENUITEMINFO menuiteminfo;
-                    menuiteminfo.cbSize = sizeof(menuiteminfo);
-                    menuiteminfo.fMask = MIIM_STRING | MIIM_ID;
-                    menuiteminfo.wID = 1;
-                    WCHAR name[] = L"exit";
-                    menuiteminfo.dwTypeData = name;
-                    InsertMenuItem(hMenu, 0, TRUE, &menuiteminfo);
-
-                    MENUITEMINFO menuiteminfo2;
-                    menuiteminfo2.cbSize = sizeof(menuiteminfo2);
-                    menuiteminfo2.fMask = MIIM_STRING | MIIM_ID;
-                    menuiteminfo2.wID = 0;
-                    WCHAR name2[] = L"setting";
-                    menuiteminfo2.dwTypeData = name2;
-                    InsertMenuItem(hMenu, 0, TRUE, &menuiteminfo2);
-                    TrackPopupMenu(hMenu, 0, po.x, po.y, 0, hWnd, NULL);
-
-                    //PostQuitMessage(0);
+                    menu.CreateMenu(hWnd);
                     break;
             }
         }
@@ -149,20 +124,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
         ShowWindow(hWnd, SW_HIDE);
         break;
+
     case WM_COMMAND:
-
-        switch (LOWORD(wParam)) {
-
-        case 0: /* Messageメニュー */
-            ShowWindow(hWnd, SW_SHOWNORMAL);
-            UpdateWindow(hWnd);
-            break;
-
-        case 1: /* Exitメニュー */
-            PostQuitMessage(0);
-            break;
-
-        }
+        menu.Command(hWnd, LOWORD(wParam));
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
         break;
