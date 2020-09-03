@@ -7,25 +7,64 @@
 void Menu::CreateMenu(HWND hWnd) {
     POINT po;
     GetCursorPos(&po);
+    int id = 0;
+    std::map<int, MENUITEMINFO> menuItemInfos;
 
     HMENU hMenu = CreatePopupMenu();
+
+    WCHAR time_name[] = L"00:00";
+    MenuItem timeMenuItem;
+    MENUITEMINFO timeMenuItemInfo = timeMenuItem.CreateMenuItem(id, time_name);
+    timeMenuItem.SelectedEvent = [](HWND hWnd) {
+        
+    };
+    menuItems[id] = timeMenuItem;
+    menuItemInfos[id] = timeMenuItemInfo;
+
+    id++;
+    WCHAR restart_name[] = L"Restart";
+    MenuItem restartMenuItem;
+    MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
+    restartMenuItem.SelectedEvent = [](HWND hWnd) {
+        
+    };
+    menuItems[id] = restartMenuItem;
+    menuItemInfos[id] = restartMenuItemInfo;
+
+    id++;
+    WCHAR pause_name[] = L"Pause";
+    MenuItem pauseMenuItem;
+    MENUITEMINFO pauseMenuItemInfo = pauseMenuItem.CreateMenuItem(id, pause_name);
+    pauseMenuItem.SelectedEvent = [](HWND hWnd) {
+        
+    };
+    menuItems[id] = pauseMenuItem;
+    menuItemInfos[id] = pauseMenuItemInfo;
+
+    id++;
     WCHAR setting_name[] = L"setting";
     MenuItem settingMenuItem;
-    MENUITEMINFO settingMenuItemInfo = settingMenuItem.CreateMenuItem(0, setting_name);
-    WCHAR exit_name[] = L"exit";
-    MenuItem exitMenuItem;
-    MENUITEMINFO exitMenuItemInfo = exitMenuItem.CreateMenuItem(1, exit_name);
+    MENUITEMINFO settingMenuItemInfo = settingMenuItem.CreateMenuItem(id, setting_name);
     settingMenuItem.SelectedEvent = [](HWND hWnd) {
         ShowWindow(hWnd, SW_SHOWNORMAL);
         UpdateWindow(hWnd);
     };
+    menuItems[id] = settingMenuItem;
+    menuItemInfos[id] = settingMenuItemInfo;
+
+    id++;
+    WCHAR exit_name[] = L"exit";
+    MenuItem exitMenuItem;
+    MENUITEMINFO exitMenuItemInfo = exitMenuItem.CreateMenuItem(id, exit_name);
     exitMenuItem.SelectedEvent = [](HWND hWnd) {
         PostQuitMessage(0);
     };
-    menuItems[0] = settingMenuItem;
-    menuItems[1] = exitMenuItem;
-    InsertMenuItem(hMenu, 0, TRUE, &exitMenuItemInfo);
-    InsertMenuItem(hMenu, 0, TRUE, &settingMenuItemInfo);
+    menuItems[id] = exitMenuItem;
+    menuItemInfos[id] = exitMenuItemInfo;
+
+    for (; id >= 0; id--) {
+        InsertMenuItem(hMenu, 0, TRUE, &menuItemInfos[id]);
+    }
     TrackPopupMenu(hMenu, 0, po.x, po.y, 0, hWnd, NULL);
 }
 
