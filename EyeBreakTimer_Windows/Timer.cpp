@@ -19,35 +19,32 @@ VOID CALLBACK SendNotification(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 
     Timer* timer = TIMER_INSTANCES[idEvent];
     timer->timerStartTime = time(NULL);
+    timer->StartTimer(hwnd, timer->timerId, timer->settingMinute);
 }
 
 
-Timer::Timer(int id) {
+void Timer::StartTimer(HWND hWnd, UINT id, int m) {
     timerId = id;
-    minute = 60;
-    isCounting = false;
-    timerStartTime = time(NULL);
-    TIMER_INSTANCES[id] = this;
-}
-
-void Timer::StartTimer(HWND hWnd, int m) {
-	minute = m;
+    settingMinute = m;
+    reminingSecond = settingMinute * 60;
     isCounting = true;
     timerStartTime = time(NULL);
+    TIMER_INSTANCES[timerId] = this;
     KillTimer(hWnd, timerId);
-    SetTimer(hWnd, timerId, 1000, SendNotification);
+    SetTimer(hWnd, timerId, reminingSecond *1000, SendNotification);
 }
 
 void Timer::PauseTimer(HWND hWnd) {
     if (isCounting) {
         time_t currentTime = time(NULL);
         double diffSecond = difftime(currentTime, timerStartTime);
-        int diffMinute = diffSecond / 60;
         KillTimer(hWnd, timerId);
-        minute -= diffMinute;
+        reminingSecond -= diffSecond;
     }
     else {
-        StartTimer(hWnd, minute);
+        timerStartTime = time(NULL);
+        KillTimer(hWnd, timerId);
+        SetTimer(hWnd, timerId, reminingSecond * 1000, SendNotification);
     }
     isCounting = !isCounting;
 }

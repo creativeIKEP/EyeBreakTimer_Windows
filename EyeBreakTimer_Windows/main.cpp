@@ -11,6 +11,7 @@ static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class n
 static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
 HINSTANCE hInst;
 Menu menu;
+Timer timer;
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -119,7 +120,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (lParam)
             {
                 case WM_LBUTTONUP:
-                    menu.CreateMenu(hWnd);
+                    menu.ShowMenu(hWnd);
                     break;
             }
         }
@@ -130,7 +131,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_COMMAND:
-        menu.Command(hWnd, LOWORD(wParam));
+        menu.Command(hWnd, LOWORD(wParam), &timer);
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
         break;
@@ -140,7 +141,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 void AppicationInit(HWND hWnd) {
-    Timer timer(0);
-    timer.StartTimer(hWnd, 1);
+    menu.CreateMenu(hWnd);
+    timer.StartTimer(hWnd, 0, 1);
 }
 
