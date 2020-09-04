@@ -3,6 +3,7 @@
 #include <string.h>
 #include <tchar.h>
 #include "menu.h"
+#include "Timer.h"
 #define WM_TASKTRAY (WM_USER+1)
 #define ID_TASKTRAY 0
 
@@ -138,23 +139,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-VOID CALLBACK SendNotification(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
-    NOTIFYICONDATA nid{ };
-    nid.cbSize = sizeof(nid);
-    nid.hWnd = hwnd;
-    nid.uID = 0;
-    nid.uFlags = NIF_INFO;
-    nid.dwInfoFlags = NIIF_INFO;
-
-    lstrcpy(nid.szInfoTitle, _T("Break Time!!"));
-    lstrcpy(nid.szInfo, _T("Å`ï™Ç™åoâﬂÇµÇ‹ÇµÇΩÅBñ⁄ÇãxåeÇ≥ÇπÇ‹ÇµÇÂÇ§ÅB"));
-
-    Shell_NotifyIcon(NIM_MODIFY, &nid);
-}
-
 void AppicationInit(HWND hWnd) {
-    int minute = 1;
-    int timerId = 1;
-    SetTimer(hWnd, timerId, minute * 60 * 1000, SendNotification);
+    Timer timer(0);
+    timer.StartTimer(hWnd, 1);
 }
 
