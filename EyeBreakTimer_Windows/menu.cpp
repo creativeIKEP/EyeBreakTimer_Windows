@@ -1,5 +1,6 @@
 #include <map>
 #include <iostream>
+#include <string>
 #include "menu.h"
 #include "menuItem.h"
 
@@ -14,19 +15,27 @@ void Menu::CreateMenu(HWND hWnd) {
     WCHAR time_name[] = L"00:00";
     MenuItem timeMenuItem;
     MENUITEMINFO timeMenuItemInfo = timeMenuItem.CreateMenuItem(id, time_name);
-    timeMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
-        
+    timeMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
+        int reminingSeconds = timer->reminingSecond;
+        int minute = reminingSeconds / 60;
+        int seconds = reminingSeconds % 60;
+        wchar_t str[10];
+        wsprintfW(str, L"%d:%d", minute, seconds);
+        ModifyMenu(hMenu, 0, MF_STRING | MF_GRAYED, 0, str);
     };
     menuItems[id] = timeMenuItem;
     InsertMenuItem(hMenu, id, TRUE, &timeMenuItemInfo);
     ModifyMenu(hMenu, id, MF_GRAYED, id, time_name);
 
     id++;
-    WCHAR restart_name[] = L"60minutes";
+    WCHAR restart_name[] = L"60M";
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
-    restartMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
-        timer->StartTimer(hWnd, timer->timerId, timer->settingMinute);
+    restartMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
+        wchar_t str[10];
+        wsprintfW(str, L"%dM", timer->settingMinute);
+        ModifyMenu(hMenu, 1, MF_STRING, 1, str);
+        timer->StartTimer(hWnd, timer->timerId, timer->settingMinute, NULL);
     };
     menuItems[id] = restartMenuItem;
     InsertMenuItem(hMenu, id, TRUE, &restartMenuItemInfo);

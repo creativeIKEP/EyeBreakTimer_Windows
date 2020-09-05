@@ -140,8 +140,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+void TimerMenuItemLabelChange(HWND hWnd) {
+    menu.Command(hWnd, 0, &timer);
+}
+
 void AppicationInit(HWND hWnd) {
     menu.CreateMenu(hWnd);
-    timer.StartTimer(hWnd, 0, 1);
+    timer.StartTimer(hWnd, 0, 1, TimerMenuItemLabelChange);
+    menu.Command(hWnd, 1, &timer);
 }
 
