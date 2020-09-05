@@ -1,11 +1,13 @@
 #pragma once
 #include <windows.h>
+#include <iostream>
+#include <functional>
 #include "Timer.h"
 
 class MenuItem {
 public:
     int id;
-    void (* SelectedEvent)(HWND hWnd, Timer* timer);
 
+    std::function<void(HWND, Timer*)> SelectedEvent;
     MENUITEMINFO CreateMenuItem(UINT id, LPWSTR name);
 };

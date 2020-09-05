@@ -6,7 +6,6 @@
 
 void Menu::CreateMenu(HWND hWnd) {
     int id = 0;
-    std::map<int, MENUITEMINFO> menuItemInfos;
     
     if (hMenu == NULL) {
         hMenu = CreatePopupMenu();
@@ -19,27 +18,33 @@ void Menu::CreateMenu(HWND hWnd) {
         
     };
     menuItems[id] = timeMenuItem;
-    menuItemInfos[id] = timeMenuItemInfo;
+    InsertMenuItem(hMenu, id, TRUE, &timeMenuItemInfo);
+    ModifyMenu(hMenu, id, MF_GRAYED, id, time_name);
 
     id++;
-    WCHAR restart_name[] = L"Restart";
+    WCHAR restart_name[] = L"60minutes";
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
     restartMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
         
     };
     menuItems[id] = restartMenuItem;
-    menuItemInfos[id] = restartMenuItemInfo;
+    InsertMenuItem(hMenu, id, TRUE, &restartMenuItemInfo);
 
     id++;
     WCHAR pause_name[] = L"Pause";
     MenuItem pauseMenuItem;
     MENUITEMINFO pauseMenuItemInfo = pauseMenuItem.CreateMenuItem(id, pause_name);
-    pauseMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
+    pauseMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
         timer->PauseTimer(hWnd);
+        if (timer->isCounting) {
+            ModifyMenu(hMenu, 2, MF_STRING, 2, L"Pause");
+            return;
+        }
+        ModifyMenu(hMenu, 2, MF_STRING, 2, L"Restart");
     };
     menuItems[id] = pauseMenuItem;
-    menuItemInfos[id] = pauseMenuItemInfo;
+    InsertMenuItem(hMenu, id, TRUE, &pauseMenuItemInfo);
 
     id++;
     WCHAR setting_name[] = L"setting";
@@ -50,7 +55,7 @@ void Menu::CreateMenu(HWND hWnd) {
         UpdateWindow(hWnd);
     };
     menuItems[id] = settingMenuItem;
-    menuItemInfos[id] = settingMenuItemInfo;
+    InsertMenuItem(hMenu, id, TRUE, &settingMenuItemInfo);
 
     id++;
     WCHAR exit_name[] = L"exit";
@@ -60,11 +65,7 @@ void Menu::CreateMenu(HWND hWnd) {
         PostQuitMessage(0);
     };
     menuItems[id] = exitMenuItem;
-    menuItemInfos[id] = exitMenuItemInfo;
-
-    for (; id >= 0; id--) {
-        InsertMenuItem(hMenu, 0, TRUE, &menuItemInfos[id]);
-    }
+    InsertMenuItem(hMenu, id, TRUE, &exitMenuItemInfo);
 }
 
 void Menu::ShowMenu(HWND hWnd) {
