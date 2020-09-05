@@ -6,12 +6,15 @@
 #include "Timer.h"
 #define WM_TASKTRAY (WM_USER+1)
 #define ID_TASKTRAY 0
+#define BUTTON_ID 999
 
-static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
-static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
+const static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
+const static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
+const static TCHAR settingFilePath[] = _T(".\\setting.ini");
 HINSTANCE hInst;
 Menu menu;
 Timer timer;
+HWND minuteTextBoxId;
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -56,12 +59,19 @@ int CALLBACK WinMain(
         szTitle,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        500, 500,
+        500, 300,
         NULL,
         NULL,
         hInstance,
         NULL
     );
+
+    AppicationInit(hWnd);
+
+    CreateWindow(TEXT("STATIC"), TEXT("SetTime"), WS_CHILD | WS_VISIBLE, 125, 30, 55, 20, hWnd, NULL , hInstance , NULL);
+    minuteTextBoxId = CreateWindow(TEXT("EDIT"), TEXT("000"), WS_CHILD | WS_VISIBLE | WS_BORDER, 200, 30, 30, 20, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("STATIC"), TEXT("minutes"), WS_CHILD | WS_VISIBLE, 250, 30, 55, 20, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("BUTTON"), TEXT("Enter"), WS_CHILD | WS_VISIBLE, 325, 25, 70, 30, hWnd, (HMENU)BUTTON_ID, hInstance, NULL);
 
     if (!hWnd)
     {
@@ -72,6 +82,9 @@ int CALLBACK WinMain(
 
         return 1;
     }
+
+    ShowWindow(hWnd, SW_SHOWNORMAL);
+    UpdateWindow(hWnd);
 
     NOTIFYICONDATA nif;
     // タスクトレイに登録
@@ -84,8 +97,6 @@ int CALLBACK WinMain(
     ::wcscpy_s(nif.szTip, 128, szTitle);
 
     Shell_NotifyIcon(NIM_ADD, &nif);
-
-    AppicationInit(hWnd);
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
@@ -109,7 +120,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
 
-        TextOut(hdc, 5, 5, greeting, _tcslen(greeting));
+        wchar_t str[3];
+        wsprintfW(str, L"%d", timer.settingMinute);
+        SetWindowText(minuteTextBoxId, str);
 
         EndPaint(hWnd, &ps);
         break;
@@ -131,6 +144,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_COMMAND:
+        if (LOWORD(wParam) == BUTTON_ID) {
+            wchar_t str[10];
+            GetWindowText(minuteTextBoxId, str, 10);
+            int m = _wtoi(str);
+            if (m > 0) {
+                WritePrivateProfileString(szWindowClass, L"minute", str, settingFilePath);
+                timer.StartTimer(hWnd, 0, m, NULL);
+                menu.Command(hWnd, 1, &timer);
+            }
+        }
         menu.Command(hWnd, LOWORD(wParam), &timer);
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -145,8 +168,12 @@ void TimerMenuItemLabelChange(HWND hWnd) {
 }
 
 void AppicationInit(HWND hWnd) {
+    int minute = GetPrivateProfileInt(szWindowClass, L"minute", 60, settingFilePath);
+    if (minute <= 0) {
+        minute = 60;
+    }
     menu.CreateMenu(hWnd);
-    timer.StartTimer(hWnd, 0, 1, TimerMenuItemLabelChange);
+    timer.StartTimer(hWnd, 0, minute, TimerMenuItemLabelChange);
     menu.Command(hWnd, 1, &timer);
 }
 
