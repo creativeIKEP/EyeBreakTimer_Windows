@@ -26,7 +26,7 @@ void Menu::CreateMenu(HWND hWnd) {
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
     restartMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
-        
+        timer->StartTimer(hWnd, timer->timerId, timer->settingMinute);
     };
     menuItems[id] = restartMenuItem;
     InsertMenuItem(hMenu, id, TRUE, &restartMenuItemInfo);
