@@ -35,12 +35,12 @@ int CALLBACK WinMain(
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
+    wcex.hIcon = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
+    wcex.hIconSm = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
 
     if (!RegisterClassEx(&wcex))
     {
@@ -89,7 +89,7 @@ int CALLBACK WinMain(
     NOTIFYICONDATA nif;
     // タスクトレイに登録
     nif.cbSize = sizeof(NOTIFYICONDATA);
-    nif.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    nif.hIcon = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
     nif.hWnd = hWnd;
     nif.uCallbackMessage = WM_TASKTRAY;
     nif.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;

@@ -28,12 +28,12 @@ void Menu::CreateMenu(HWND hWnd) {
     ModifyMenu(hMenu, id, MF_GRAYED, id, time_name);
 
     id++;
-    WCHAR restart_name[] = L"60M";
+    WCHAR restart_name[] = L"60 min";
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
     restartMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
         wchar_t str[10];
-        wsprintfW(str, L"%dM", timer->settingMinute);
+        wsprintfW(str, L"%d min", timer->settingMinute);
         ModifyMenu(hMenu, 1, MF_STRING, 1, str);
         timer->StartTimer(hWnd, timer->timerId, timer->settingMinute, NULL);
     };
