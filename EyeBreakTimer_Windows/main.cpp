@@ -1,7 +1,9 @@
+#pragma comment( lib, "wtsapi32.lib" )
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
+#include<wtsapi32.h>
 #include "menu.h"
 #include "Timer.h"
 #define WM_TASKTRAY (WM_USER+1)
@@ -66,6 +68,7 @@ int CALLBACK WinMain(
         NULL
     );
 
+    WTSRegisterSessionNotification(hWnd, NOTIFY_FOR_THIS_SESSION);
     AppicationInit(hWnd);
 
     CreateWindow(TEXT("STATIC"), TEXT("SetTime"), WS_CHILD | WS_VISIBLE, 125, 30, 55, 20, hWnd, NULL , hInstance , NULL);
@@ -155,6 +158,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         menu.Command(hWnd, LOWORD(wParam), &timer);
+    case WM_WTSSESSION_CHANGE:
+        switch (wParam) {
+        case WTS_SESSION_LOCK:
+            MessageBox(NULL, TEXT("lock"),
+                TEXT("メッセージボックス"), MB_OK);
+        case WTS_SESSION_UNLOCK:
+            MessageBox(NULL, TEXT("unlock"),
+                TEXT("メッセージボックス"), MB_OK);
+        }
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
         break;
