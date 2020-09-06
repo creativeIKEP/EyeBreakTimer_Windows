@@ -6,6 +6,7 @@
 #include<wtsapi32.h>
 #include "menu.h"
 #include "Timer.h"
+#include "langage.h"
 #define WM_TASKTRAY (WM_USER+1)
 #define ID_TASKTRAY 0
 #define BUTTON_ID1 101
@@ -77,13 +78,13 @@ int CALLBACK WinMain(
     WTSRegisterSessionNotification(hWnd, NOTIFY_FOR_THIS_SESSION);
     AppicationInit(hWnd);
 
-    CreateWindow(TEXT("STATIC"), TEXT("SetTime"), WS_CHILD | WS_VISIBLE, 125, 30, 55, 20, hWnd, NULL , hInstance , NULL);
-    minuteTextBoxId = CreateWindow(TEXT("EDIT"), TEXT("000"), WS_CHILD | WS_VISIBLE, 200, 30, 30, 20, hWnd, NULL, hInstance, NULL);
-    CreateWindow(TEXT("STATIC"), TEXT("minutes"), WS_CHILD | WS_VISIBLE, 250, 30, 55, 20, hWnd, NULL, hInstance, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("Enter"), WS_CHILD | WS_VISIBLE, 325, 25, 70, 30, hWnd, (HMENU)BUTTON_ID1, hInstance, NULL);
-    pauseCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Stop timer when PC was locked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 125, 80, 250, 30, hWnd, (HMENU)BUTTON_ID2, hInstance, NULL);
-    restartCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Restart timer when PC unlocked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 150, 250, 30, hWnd, (HMENU)BUTTON_ID3, hInstance, NULL);
-    resetCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Reset time and start timer when PC was unlocked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 190, 370, 30, hWnd, (HMENU)BUTTON_ID4, hInstance, NULL);
+    CreateWindow(TEXT("STATIC"), LANG_SETTIME, WS_CHILD | WS_VISIBLE, 125, 30, 70, 20, hWnd, NULL , hInstance , NULL);
+    minuteTextBoxId = CreateWindow(TEXT("EDIT"), TEXT("000"), WS_CHILD | WS_VISIBLE | WS_BORDER,  205, 29, 30, 22, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("STATIC"), LANG_MINUTES, WS_CHILD | WS_VISIBLE, 250, 30, 55, 20, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("BUTTON"), TEXT("Enter"), WS_CHILD | WS_VISIBLE, 325, 25, 85, 30, hWnd, (HMENU)BUTTON_ID1, hInstance, NULL);
+    pauseCheckBoxId = CreateWindow(TEXT("BUTTON"), LANG_LOCKEDPAUSE, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 125, 80, 300, 30, hWnd, (HMENU)BUTTON_ID2, hInstance, NULL);
+    restartCheckBoxId = CreateWindow(TEXT("BUTTON"), LANG_UNLOCKED_RESTART, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 150, 310, 30, hWnd, (HMENU)BUTTON_ID3, hInstance, NULL);
+    resetCheckBoxId = CreateWindow(TEXT("BUTTON"), LANG_UNLOCKED_RESET, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 190, 390, 30, hWnd, (HMENU)BUTTON_ID4, hInstance, NULL);
 
     if (!hWnd)
     {
@@ -122,7 +123,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
-    TCHAR greeting[] = _T("Hello, Windows desktop!");
 
     switch (message)
     {

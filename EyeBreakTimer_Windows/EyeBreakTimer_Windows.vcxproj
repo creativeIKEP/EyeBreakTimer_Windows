@@ -147,9 +147,9 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="langage.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="menuItem.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

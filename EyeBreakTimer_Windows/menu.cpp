@@ -3,7 +3,7 @@
 #include <string>
 #include "menu.h"
 #include "menuItem.h"
-
+#include"langage.h"
 
 void Menu::CreateMenu(HWND hWnd) {
     int id = 0;
@@ -28,12 +28,12 @@ void Menu::CreateMenu(HWND hWnd) {
     ModifyMenu(hMenu, id, MF_GRAYED, id, time_name);
 
     id++;
-    WCHAR restart_name[] = L"60 min";
+    WCHAR restart_name[] = L"00 min";
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
     restartMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
         wchar_t str[10];
-        wsprintfW(str, L"%d min", timer->settingMinute);
+        wsprintfW(str, L"%d %s", timer->settingMinute, LANG_MINUTES);
         ModifyMenu(hMenu, 1, MF_STRING, 1, str);
         timer->StartTimer(hWnd, timer->timerId, timer->settingMinute, NULL);
     };
@@ -41,24 +41,22 @@ void Menu::CreateMenu(HWND hWnd) {
     InsertMenuItem(hMenu, id, TRUE, &restartMenuItemInfo);
 
     id++;
-    WCHAR pause_name[] = L"Pause";
     MenuItem pauseMenuItem;
-    MENUITEMINFO pauseMenuItemInfo = pauseMenuItem.CreateMenuItem(id, pause_name);
+    MENUITEMINFO pauseMenuItemInfo = pauseMenuItem.CreateMenuItem(id, LANG_PAUSE);
     pauseMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
         timer->PauseTimer(hWnd);
         if (timer->isCounting) {
-            ModifyMenu(hMenu, 2, MF_STRING, 2, L"Pause");
+            ModifyMenu(hMenu, 2, MF_STRING, 2, LANG_PAUSE);
             return;
         }
-        ModifyMenu(hMenu, 2, MF_STRING, 2, L"Restart");
+        ModifyMenu(hMenu, 2, MF_STRING, 2, LANG_RESTART);
     };
     menuItems[id] = pauseMenuItem;
     InsertMenuItem(hMenu, id, TRUE, &pauseMenuItemInfo);
 
     id++;
-    WCHAR setting_name[] = L"setting";
     MenuItem settingMenuItem;
-    MENUITEMINFO settingMenuItemInfo = settingMenuItem.CreateMenuItem(id, setting_name);
+    MENUITEMINFO settingMenuItemInfo = settingMenuItem.CreateMenuItem(id, LANG_SETTING);
     settingMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
         ShowWindow(hWnd, SW_SHOWNORMAL);
         UpdateWindow(hWnd);
@@ -67,9 +65,8 @@ void Menu::CreateMenu(HWND hWnd) {
     InsertMenuItem(hMenu, id, TRUE, &settingMenuItemInfo);
 
     id++;
-    WCHAR exit_name[] = L"exit";
     MenuItem exitMenuItem;
-    MENUITEMINFO exitMenuItemInfo = exitMenuItem.CreateMenuItem(id, exit_name);
+    MENUITEMINFO exitMenuItemInfo = exitMenuItem.CreateMenuItem(id, LANG_EXIT);
     exitMenuItem.SelectedEvent = [](HWND hWnd, Timer* timer) {
         PostQuitMessage(0);
     };

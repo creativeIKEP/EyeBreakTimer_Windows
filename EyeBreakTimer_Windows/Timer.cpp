@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include <tchar.h>
+#include"langage.h"
 #define INTERVAL_TIMER_IDFIX 100
 
 
@@ -15,7 +16,7 @@ VOID CALLBACK SendNotification(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
     nid.dwInfoFlags = NIIF_INFO;
 
     lstrcpy(nid.szInfoTitle, _T("Break Time!!"));
-    lstrcpy(nid.szInfo, _T("Å`ï™Ç™åoâﬂÇµÇ‹ÇµÇΩÅBñ⁄ÇãxåeÇ≥ÇπÇ‹ÇµÇÂÇ§ÅB"));
+    lstrcpy(nid.szInfo, LANG_TIMER_MESSAGE);
 
     Shell_NotifyIcon(NIM_MODIFY, &nid);
 
