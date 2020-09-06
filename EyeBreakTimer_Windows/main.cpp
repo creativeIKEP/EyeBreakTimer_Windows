@@ -46,7 +46,7 @@ int CALLBACK WinMain(
     wcex.hInstance = hInstance;
     wcex.hIcon = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.hbrBackground = (HBRUSH)COLOR_BTNSHADOW;
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
@@ -66,7 +66,7 @@ int CALLBACK WinMain(
     HWND hWnd = CreateWindow(
         szWindowClass,
         szTitle,
-        WS_OVERLAPPEDWINDOW,
+        WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX,
         CW_USEDEFAULT, CW_USEDEFAULT,
         500, 300,
         NULL,
@@ -78,11 +78,11 @@ int CALLBACK WinMain(
     WTSRegisterSessionNotification(hWnd, NOTIFY_FOR_THIS_SESSION);
     AppicationInit(hWnd);
 
-    CreateWindow(TEXT("STATIC"), TEXT("SetTime"), WS_CHILD | WS_VISIBLE, 105, 30, 55, 20, hWnd, NULL , hInstance , NULL);
-    minuteTextBoxId = CreateWindow(TEXT("EDIT"), TEXT("000"), WS_CHILD | WS_VISIBLE | WS_BORDER, 180, 30, 30, 20, hWnd, NULL, hInstance, NULL);
-    CreateWindow(TEXT("STATIC"), TEXT("minutes"), WS_CHILD | WS_VISIBLE, 230, 30, 55, 20, hWnd, NULL, hInstance, NULL);
-    CreateWindow(TEXT("BUTTON"), TEXT("Enter"), WS_CHILD | WS_VISIBLE, 305, 25, 70, 30, hWnd, (HMENU)BUTTON_ID1, hInstance, NULL);
-    pauseCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Stop timer when PC was locked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 105, 80, 250, 30, hWnd, (HMENU)BUTTON_ID2, hInstance, NULL);
+    CreateWindow(TEXT("STATIC"), TEXT("SetTime"), WS_CHILD | WS_VISIBLE, 125, 30, 55, 20, hWnd, NULL , hInstance , NULL);
+    minuteTextBoxId = CreateWindow(TEXT("EDIT"), TEXT("000"), WS_CHILD | WS_VISIBLE, 200, 30, 30, 20, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("STATIC"), TEXT("minutes"), WS_CHILD | WS_VISIBLE, 250, 30, 55, 20, hWnd, NULL, hInstance, NULL);
+    CreateWindow(TEXT("BUTTON"), TEXT("Enter"), WS_CHILD | WS_VISIBLE, 325, 25, 70, 30, hWnd, (HMENU)BUTTON_ID1, hInstance, NULL);
+    pauseCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Stop timer when PC was locked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 125, 80, 250, 30, hWnd, (HMENU)BUTTON_ID2, hInstance, NULL);
     restartCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Restart timer when PC unlocked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 150, 250, 30, hWnd, (HMENU)BUTTON_ID3, hInstance, NULL);
     resetCheckBoxId = CreateWindow(TEXT("BUTTON"), TEXT("Reset time and start timer when PC was unlocked"), WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, 60, 190, 370, 30, hWnd, (HMENU)BUTTON_ID4, hInstance, NULL);
 
