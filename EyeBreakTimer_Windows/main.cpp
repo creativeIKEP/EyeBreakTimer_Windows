@@ -6,6 +6,7 @@
 #include<wtsapi32.h>
 #include "menu.h"
 #include "Timer.h"
+#include "resource.h"
 #define WM_TASKTRAY (WM_USER+1)
 #define ID_TASKTRAY 0
 #define BUTTON_ID1 101
