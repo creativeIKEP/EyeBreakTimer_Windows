@@ -8,6 +8,8 @@ static std::map<int, Timer*> TIMER_INSTANCES;
 static std::map<int, std::function<void(HWND)>> Interval1SecondFuncs;
 
 VOID CALLBACK SendNotification(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
+    Timer* timer = TIMER_INSTANCES[idEvent];
+
     NOTIFYICONDATA nid{ };
     nid.cbSize = sizeof(nid);
     nid.hWnd = hwnd;
@@ -15,12 +17,14 @@ VOID CALLBACK SendNotification(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
     nid.uFlags = NIF_INFO;
     nid.dwInfoFlags = NIIF_INFO;
 
+    wchar_t str[256];
+    wsprintfW(str, L"%d%s", timer->settingMinute, LANG_TIMER_MESSAGE);
+
     lstrcpy(nid.szInfoTitle, _T("Break Time!!"));
-    lstrcpy(nid.szInfo, LANG_TIMER_MESSAGE);
+    lstrcpy(nid.szInfo, str);
 
     Shell_NotifyIcon(NIM_MODIFY, &nid);
 
-    Timer* timer = TIMER_INSTANCES[idEvent];
     timer->timerStartTime = time(NULL);
     timer->StartTimer(hwnd, timer->timerId, timer->settingMinute, NULL);
 }
