@@ -100,7 +100,7 @@ int CALLBACK WinMain(
     }
 
     NOTIFYICONDATA nif;
-    // ƒ^ƒXƒNƒgƒŒƒC‚É“o˜^
+    // ï¿½^ï¿½Xï¿½Nï¿½gï¿½ï¿½ï¿½Cï¿½É“oï¿½^
     nif.cbSize = sizeof(NOTIFYICONDATA);
     nif.hIcon = LoadIcon(wcex.hInstance, TEXT("APP_ICON"));
     nif.hWnd = hWnd;
@@ -144,7 +144,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         else {
             SendMessage(pauseCheckBoxId, BM_SETCHECK, BST_UNCHECKED, NULL);
         }
-        
+
         GetPrivateProfileString(szWindowClass, L"unlockedRestart", L"FALSE", str, 10, settingFilePath);
         if (wcscmp(str, L"TRUE") == 0) {
             SendMessage(restartCheckBoxId, BM_SETCHECK, BST_CHECKED, NULL);
@@ -175,7 +175,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-  
+
     case WM_CLOSE:
         ShowWindow(hWnd, SW_HIDE);
         break;
