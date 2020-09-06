@@ -20,7 +20,7 @@ void Menu::CreateMenu(HWND hWnd) {
         int minute = reminingSeconds / 60;
         int seconds = reminingSeconds % 60;
         wchar_t str[10];
-        wsprintfW(str, L"%d:%d", minute, seconds);
+        wsprintfW(str, L"%02d : %02d", minute, seconds);
         ModifyMenu(hMenu, 0, MF_STRING | MF_GRAYED, 0, str);
     };
     menuItems[id] = timeMenuItem;
@@ -28,7 +28,7 @@ void Menu::CreateMenu(HWND hWnd) {
     ModifyMenu(hMenu, id, MF_GRAYED, id, time_name);
 
     id++;
-    WCHAR restart_name[] = L"00 min";
+    WCHAR restart_name[] = L"0 min";
     MenuItem restartMenuItem;
     MENUITEMINFO restartMenuItemInfo = restartMenuItem.CreateMenuItem(id, restart_name);
     restartMenuItem.SelectedEvent = [&](HWND hWnd, Timer* timer) {
