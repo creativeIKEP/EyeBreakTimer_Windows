@@ -35,6 +35,7 @@ void Menu::CreateMenu(HWND hWnd) {
         wchar_t str[10];
         wsprintfW(str, L"%d %s", timer->settingMinute, LANG_MINUTES);
         ModifyMenu(hMenu, 1, MF_STRING, 1, str);
+        ModifyMenu(hMenu, 2, MF_STRING, 2, LANG_PAUSE);
         timer->StartTimer(hWnd, timer->timerId, timer->settingMinute, NULL);
     };
     menuItems[id] = restartMenuItem;
