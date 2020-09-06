@@ -16,7 +16,7 @@
 
 const static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
 const static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
-const static TCHAR settingFilePath[] = _T(".\\setting.ini");
+const static TCHAR settingFilePath[] = _T("EyeBreakTimerSetting.ini");
 HINSTANCE hInst;
 Menu menu;
 Timer timer;
