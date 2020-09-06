@@ -21,12 +21,20 @@ In addition, application timer is started, stopped, and reset by linking with PC
 - You can check time, Reset timer with minutes, Pause & Restart, Open setting window, and exit app.
 - You can set custom time and "linking functions with PC lock" from setting window.
 (Setting window properties are saved in `C:\Users\<user name>\AppData\Roaming\Eye Break Timer\Setting.ini`.)
+- You can turn off so that app can't start up in PC login by bellow method.
+
+1. Go to Windows Setting App.
+```
+Start -> Settings -> Apps -> Startup
+```
+2. Turn off Eye Break Timer
 
 ### Author
 [IKEP](https://ikep.jp)
 
 ### LICENSE
 Copyright (c) 2020 IKEP
+
 [MIT](/LICENSE)
 
 \* **Apply the MIT license to the source code only. It does not include images.**
