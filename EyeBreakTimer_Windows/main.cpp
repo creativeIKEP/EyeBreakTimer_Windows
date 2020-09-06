@@ -5,6 +5,7 @@
 #include <tchar.h>
 #include<wtsapi32.h>
 #include<fstream>
+#include <Shlobj_core.h>
 #include "menu.h"
 #include "Timer.h"
 #include "langage.h"
@@ -17,7 +18,8 @@
 
 const static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
 const static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
-const static TCHAR settingFilePath[] = _T("./EyeBreakTimerSetting.ini");
+const static TCHAR settingFileName[] = _T("Setting.ini");
+static TCHAR settingFilePath[MAX_PATH];
 HINSTANCE hInst;
 Menu menu;
 Timer timer;
@@ -252,8 +254,17 @@ void TimerMenuItemLabelChange(HWND hWnd) {
 }
 
 void AppicationInit(HWND hWnd) {
+    TCHAR iniPath[MAX_PATH];
+    SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, NULL, iniPath);
+    //C:\Users\username\AppData\Roaming\Eye Break Timer
+    wsprintf(iniPath, TEXT("%s\\%s"), iniPath, szWindowClass);
+    CreateDirectory(iniPath, NULL);
+    //C:\Users\username\AppData\Roaming\Eye Break Timer\Setting.ini
+    wsprintf(settingFilePath, TEXT("%s\\%s"), iniPath, settingFileName);
+
     std::ifstream ifs(settingFilePath);
-    if (!ifs.is_open()) {
+    if (ifs.fail()) {
+        //Set default params if does not exist Setting.ini file
         WritePrivateProfileString(szWindowClass, L"minute", L"60", settingFilePath);
         WritePrivateProfileString(szWindowClass, L"lockedPause", L"FALSE", settingFilePath);
         WritePrivateProfileString(szWindowClass, L"unlockedRestart", L"FALSE", settingFilePath);
