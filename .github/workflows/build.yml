@@ -10,5 +10,5 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: MSBuild
-      working-directory: src
-      run: msbuild EyeBreakTimer_Windows.sln -t:build -p:configuration=release -p:platform="x86
+      run: msbuild EyeBreakTimer_Windows.sln /t:build /p:configuration=release /p:platform="x86"
+      shell: cmd
