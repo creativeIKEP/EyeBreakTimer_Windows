@@ -4,6 +4,7 @@
 #include <string.h>
 #include <tchar.h>
 #include<wtsapi32.h>
+#include<fstream>
 #include "menu.h"
 #include "Timer.h"
 #include "langage.h"
@@ -16,7 +17,7 @@
 
 const static TCHAR szWindowClass[] = _T("Eye Break Timer"); // The main window class name.
 const static TCHAR szTitle[] = _T("Eye Break Timer"); // The string that appears in the application's title bar.
-const static TCHAR settingFilePath[] = _T("EyeBreakTimerSetting.ini");
+const static TCHAR settingFilePath[] = _T("./EyeBreakTimerSetting.ini");
 HINSTANCE hInst;
 Menu menu;
 Timer timer;
@@ -251,6 +252,14 @@ void TimerMenuItemLabelChange(HWND hWnd) {
 }
 
 void AppicationInit(HWND hWnd) {
+    std::ifstream ifs(settingFilePath);
+    if (!ifs.is_open()) {
+        WritePrivateProfileString(szWindowClass, L"minute", L"60", settingFilePath);
+        WritePrivateProfileString(szWindowClass, L"lockedPause", L"FALSE", settingFilePath);
+        WritePrivateProfileString(szWindowClass, L"unlockedRestart", L"FALSE", settingFilePath);
+        WritePrivateProfileString(szWindowClass, L"unlockedReset", L"FALSE", settingFilePath);
+    }
+
     int minute = GetPrivateProfileInt(szWindowClass, L"minute", 60, settingFilePath);
     if (minute <= 0) {
         minute = 60;
