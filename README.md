@@ -1,4 +1,6 @@
 # EyeBreakTimer_Windows
+![](https://github.com/creativeIKEP/EyeBreakTimer_Windows/workflows/MSBuild/badge.svg)
+
 ![toolbar](/screenshot/toolbar.png) ![setting](/screenshot/setting.png) ![notification](/screenshot/notification.png)
 
 Eye Break Timer is an app reside in Windows tool bar for suppressing eye fatigue caused by long working hours.

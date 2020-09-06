@@ -22,7 +22,7 @@ const static TCHAR settingFileName[] = _T("Setting.ini");
 static TCHAR settingFilePath[MAX_PATH];
 HINSTANCE hInst;
 Menu menu;
-Timer timer
+Timer timer;
 HWND minuteTextBoxId;
 HWND pauseCheckBoxId;
 HWND restartCheckBoxId;
