@@ -11,7 +11,7 @@ In addition, application timer is started, stopped, and reset by linking with PC
 - English
 
 ### Install
-1. Download insaller(`.msi` or `.exe` file) from [releases](/releases) page and execute.
+1. Download insaller(`.msi` or `.exe` file) from [releases](https://github.com/creativeIKEP/EyeBreakTimer_Windows/releases/latest) page and execute.
 2. Start Eye Break Timer app!
 
 \* If you use MacOS, you can install from [Mac App Store](https://apps.apple.com/jp/app/eye-break-timer/id1299583418).
